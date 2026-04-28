@@ -1,0 +1,77 @@
+/* ============================================================
+   Mobile adaptation — slides are 1920×1080 and scale to fit.
+   On a phone in landscape that already works; in portrait the
+   slide collapses to a sliver, so we prompt the user to rotate.
+   ============================================================ */
+
+#rotate-prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 32px;
+  background: #000;
+  color: #E8E3D8;
+  font-family: 'Inter Tight', system-ui, sans-serif;
+  text-align: center;
+}
+
+#rotate-prompt .icon {
+  width: 72px;
+  height: 72px;
+  border: 2px solid #CCFF00;
+  border-radius: 12px;
+  position: relative;
+  animation: rotate-hint 2.4s ease-in-out infinite;
+}
+
+#rotate-prompt .icon::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: #CCFF00;
+  border-radius: 2px;
+}
+
+@keyframes rotate-hint {
+  0%, 40% { transform: rotate(0deg); }
+  60%, 100% { transform: rotate(-90deg); }
+}
+
+#rotate-prompt h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+#rotate-prompt p {
+  font-size: 14px;
+  margin: 0;
+  color: rgba(232, 227, 216, 0.6);
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* Show only on coarse-pointer devices in portrait */
+@media (max-width: 900px) and (orientation: portrait) and (pointer: coarse) {
+  #rotate-prompt { display: flex; }
+  /* Hide deck UI behind it; deck still mounts so it's ready post-rotate */
+  deck-stage { visibility: hidden; }
+}
+
+/* Landscape mobile tweaks — make tap navigation easier */
+@media (max-width: 1024px) and (pointer: coarse) {
+  /* Prevent iOS Safari URL bar from breaking 100vh fit */
+  html, body { height: 100%; overflow: hidden; }
+  /* Disable hover-only overlays so tap targets aren't blocked */
+  body { -webkit-tap-highlight-color: transparent; }
+}
